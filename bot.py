@@ -17,7 +17,7 @@ async def cmd_help(message: types.Message) -> None:
     await message.answer("Help")
 
 
-@dp.inline_handler(lambda x: x.text == "")
+@dp.inline_handler(lambda x: x.query == "")
 async def empty_inline(query: types.InlineQuery):
     await query.answer()
     
@@ -26,7 +26,7 @@ async def empty_inline(query: types.InlineQuery):
 async def _inline(query: types.InlineQuery):
     ns = vars(math).copy()
     ns['__builtins__'] = None
-    res = eval(query.text, ns)
+    res = eval(query.query, ns)
     await query.answer(
         results=[
             types.InlineQueryResultArticle(
@@ -34,7 +34,7 @@ async def _inline(query: types.InlineQuery):
                 title="Natija",
                 description=str(res),
                 input_message_content=types.InputMessageContent(
-                    message_text=query.text +" = "+ str(res)
+                    message_text=query.query +" = "+ str(res)
                 )
             )    
         ], 

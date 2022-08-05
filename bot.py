@@ -1,3 +1,4 @@
+import math
 from config import API_TOKEN
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -15,3 +16,28 @@ async def cmd_start(message: types.Message) -> None:
 async def cmd_help(message: types.Message) -> None:
     await message.answer("Help")
 
+
+@dp.inline_handler(lambda x: x.text == "")
+async def empty_inline(query: types.InlineQuery):
+    await query.answer()
+    
+
+@dp.inline_handler()
+async def _inline(query: types.InlineQuery):
+    ns = vars(math).copy()
+    ns['__builtins__'] = None
+    res = eval(query.text, ns)
+    await query.answer(
+        results=[
+            types.InlineQueryResultArticle(
+                id=query.id,
+                title="Natija",
+                description=str(res),
+                input_message_content=types.InputMessageContent(
+                    message_text=query.text +" = "+ str(res)
+                )
+            )    
+        ], 
+        cache_time=10,
+        is_personal=True
+        )

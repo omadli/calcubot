@@ -17,27 +17,57 @@ async def cmd_help(message: types.Message) -> None:
     await message.answer("Help")
 
 
-@dp.inline_handler(lambda x: x.text == "")
+@dp.inline_handler(lambda x: x.query == "")
 async def empty_inline(query: types.InlineQuery):
-    await query.answer()
+    await query.answer(
+        results=[
+            types.InlineQueryResultArticle(
+               id=query.id,
+               title="Noto'g'ri so'rov",
+               description="Kiritgan misolingizni tekshiring:",
+               input_message_content=types.InputMessageContent(
+                        message_text=f"Biror bir misol kiriting",
+                    ),
+               reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                   [types.InlineKeyboardButton(text="Calc", switch_inline_query_current_chat="1+2")],
+               ])
+            )
+        ],
+    )
     
 
 @dp.inline_handler()
 async def _inline(query: types.InlineQuery):
     ns = vars(math).copy()
     ns['__builtins__'] = None
-    res = eval(query.text, ns)
-    await query.answer(
-        results=[
-            types.InlineQueryResultArticle(
-                id=query.id,
-                title="Natija",
-                description=str(res),
-                input_message_content=types.InputMessageContent(
-                    message_text=query.text +" = "+ str(res)
-                )
-            )    
-        ], 
-        cache_time=10,
-        is_personal=True
+    try:
+        res = eval(query.query, ns)
+        await query.answer(
+            results=[
+                types.InlineQueryResultArticle(
+                    id=query.id,
+                    title="Natija",
+                    description=str(res),
+                    input_message_content=types.InputMessageContent(
+                        message_text=query.query +" = "+ str(res),
+                        parse_mode=types.ParseMode.HTML                        
+                    )
+                )    
+            ], 
         )
+    except Exception as e:
+        print(e)
+        await query.answer(
+            results=[
+                types.InlineQueryResultArticle(
+                id=query.id,
+                title="Noto'g'ri so'rov",
+                description="Kiritgan misolingizni tekshiring:",
+                input_message_content=types.InputMessageContent(
+                            message_text=f"<code>{query.query}</code>\n\nNo'to'g'ri misol!",
+                            parse_mode=types.ParseMode.HTML
+                        ) 
+                )
+            ],
+        )
+        

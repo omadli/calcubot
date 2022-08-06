@@ -19,25 +19,56 @@ async def cmd_help(message: types.Message) -> None:
 
 @dp.inline_handler(lambda x: x.query == "")
 async def empty_inline(query: types.InlineQuery):
-    await query.answer()
+    await query.answer(
+        results=[
+            types.InlineQueryResultArticle(
+               id=query.id,
+               title="Noto'g'ri so'rov",
+               description="Kiritgan misolingizni tekshiring:",
+               input_message_content=types.InputMessageContent(
+                        message_text=f"<code>{query.query}</code>\n\nNo'to'g'ri misol!"
+                    ) 
+            )
+        ],
+        switch_pm_text="Namuna",
+        switch_pm_parameter="1+2"
+    )
     
 
 @dp.inline_handler()
 async def _inline(query: types.InlineQuery):
     ns = vars(math).copy()
     ns['__builtins__'] = None
-    res = eval(query.query, ns)
-    await query.answer(
-        results=[
-            types.InlineQueryResultArticle(
-                id=query.id,
-                title="Natija",
-                description=str(res),
-                input_message_content=types.InputMessageContent(
-                    message_text=query.query +" = "+ str(res)
-                )
-            )    
-        ], 
-        cache_time=10,
-        is_personal=True
+    try:
+        res = eval(query.query, ns)
+        await query.answer(
+            results=[
+                types.InlineQueryResultArticle(
+                    id=query.id,
+                    title="Natija",
+                    description=str(res),
+                    input_message_content=types.InputMessageContent(
+                        message_text=query.query +" = "+ str(res)
+                    )
+                )    
+            ], 
+            cache_time=10,
+            is_personal=True
         )
+    except Exception as e:
+        print(e)
+        await query.answer(
+            results=[
+                types.InlineQueryResultArticle(
+                id=query.id,
+                title="Noto'g'ri so'rov",
+                description="Kiritgan misolingizni tekshiring:",
+                input_message_content=types.InputMessageContent(
+                            message_text=f"<code>{query.query}</code>\n\nNo'to'g'ri misol!"
+                        ) 
+                )
+            ],
+            switch_pm_text="Namuna",
+            switch_pm_parameter="1+2"
+        )
+        

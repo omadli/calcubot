@@ -26,7 +26,8 @@ async def empty_inline(query: types.InlineQuery):
                title="Noto'g'ri so'rov",
                description="Kiritgan misolingizni tekshiring:",
                input_message_content=types.InputMessageContent(
-                        message_text=f"<code>{query.query}</code>\n\nNo'to'g'ri misol!"
+                        message_text=f"<code>{query.query}</code>\n\nNo'to'g'ri misol!",
+                        parse_mode=types.ParseMode.HTML
                     ) 
             )
         ],

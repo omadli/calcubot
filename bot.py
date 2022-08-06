@@ -54,8 +54,6 @@ async def _inline(query: types.InlineQuery):
                     )
                 )    
             ], 
-            cache_time=10,
-            is_personal=True
         )
     except Exception as e:
         print(e)

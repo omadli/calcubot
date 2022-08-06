@@ -26,9 +26,11 @@ async def empty_inline(query: types.InlineQuery):
                title="Noto'g'ri so'rov",
                description="Kiritgan misolingizni tekshiring:",
                input_message_content=types.InputMessageContent(
-                        message_text=f"<code>{query.query}</code>\n\nNo'to'g'ri misol!",
-                        parse_mode=types.ParseMode.HTML
-                    ) 
+                        message_text=f"Biror bir misol kiriting",
+                    ),
+               reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                   [types.InlineKeyboardButton(text="Calc", switch_inline_query_current_chat="1+2")],
+               ])
             )
         ],
     )

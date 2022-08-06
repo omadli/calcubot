@@ -31,7 +31,6 @@ async def empty_inline(query: types.InlineQuery):
             )
         ],
         switch_pm_text="Namuna",
-        switch_pm_parameter="1+2"
     )
     
 
@@ -69,6 +68,5 @@ async def _inline(query: types.InlineQuery):
                 )
             ],
             switch_pm_text="Namuna",
-            switch_pm_parameter="1+2"
         )
         
